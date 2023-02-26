@@ -8,14 +8,65 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var correctValue = Int.random(in: 1..<100)
+    @State private var sliderValue = 50.0  // 初期値50
+    @State private var isEditing = false
+    @State private var alertMessage: String?
+    @State private var showingAlert = false
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("\(Int(correctValue))")
+                .foregroundColor(.blue)
+                .font(.title)
+
+            //スライダーを配置(1-100)
+            Slider(value: $sliderValue,
+                   in: 1 ... 100,
+                   step: 1,
+                   onEditingChanged: { editing in
+                isEditing = editing
+            })
+
+            HStack {
+                // スライダーの最小値(1)表示
+                Text("1")
+
+                Spacer()
+                // スライダーの最大値(100)を表示
+                Text("100")
+            }
+
+            // 判定ボタン
+            Button( action: {
+                if correctValue == Int(sliderValue) {
+                    showingAlert = true
+                    alertMessage = """
+                    あたり
+                    あなたの値: \(Int(sliderValue))
+                    """
+                    correctValue = Int.random(in: 1..<100) // 正解のときの更新
+
+                } else {
+                    showingAlert = true
+                    alertMessage = """
+                    はずれ
+                    あなたの値: \(Int(sliderValue))
+                    """
+                }
+            }) {
+                Text("判定")
+            }
         }
-        .padding()
+        .alert(
+            "結果",
+            isPresented: $showingAlert,
+            presenting: alertMessage,
+            actions: { _ in Button("再挑戦"){} },
+            message: { message in
+                Text(message)
+            }
+        )
     }
 }
 
