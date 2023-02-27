@@ -45,7 +45,6 @@ struct ContentView: View {
                     あたり
                     あなたの値: \(Int(sliderValue))
                     """
-                    correctValue = Int.random(in: 1..<100) // 正解のときの更新
 
                 } else {
                     showingAlert = true
@@ -53,16 +52,20 @@ struct ContentView: View {
                     はずれ
                     あなたの値: \(Int(sliderValue))
                     """
+
                 }
             }) {
-                Text("判定")
+                Text("判定!")
             }
         }
         .alert(
             "結果",
             isPresented: $showingAlert,
             presenting: alertMessage,
-            actions: { _ in Button("再挑戦"){} },
+            actions: { _ in Button("再挑戦"){
+                correctValue = Int.random(in: 1..<100)
+                sliderValue = 50.0
+            } },
             message: { message in
                 Text(message)
             }
