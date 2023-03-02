@@ -40,15 +40,14 @@ struct ContentView: View {
 
             // 判定ボタン
             Button( action: {
+                showingAlert = true
                 if correctValue == Int(sliderValue) {
-                    showingAlert = true
                     alertMessage = """
                     あたり
                     あなたの値: \(Int(sliderValue))
                     """
 
                 } else {
-                    showingAlert = true
                     alertMessage = """
                     はずれ
                     あなたの値: \(Int(sliderValue))
