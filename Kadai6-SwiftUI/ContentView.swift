@@ -8,33 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var correctValue = Int.random(in: 1..<100)
+    @State private var correctValue = Int.random(in: Self.range)
     @State private var sliderValue = 50.0  // 初期値50
-    @State private var isEditing = false
     @State private var alertMessage: String?
     @State private var showingAlert = false
 
+    private static let range = 1...100
+    private static var floatRange: ClosedRange<Double> {
+        Double(Self.range.lowerBound)...Double(Self.range.upperBound)
+    }
+
     var body: some View {
         VStack {
-            Text("\(Int(correctValue))")
+            Text("\(correctValue)")
                 .foregroundColor(.blue)
                 .font(.title)
 
             //スライダーを配置(1-100)
             Slider(value: $sliderValue,
-                   in: 1 ... 100,
-                   step: 1,
-                   onEditingChanged: { editing in
-                isEditing = editing
-            })
+                   in: Self.floatRange,
+                   step: 1)
 
             HStack {
                 // スライダーの最小値(1)表示
-                Text("1")
+                Text("\(Self.range.lowerBound)")
 
                 Spacer()
                 // スライダーの最大値(100)を表示
-                Text("100")
+                Text("\(Self.range.upperBound)")
             }
 
             // 判定ボタン
@@ -63,7 +64,7 @@ struct ContentView: View {
             isPresented: $showingAlert,
             presenting: alertMessage,
             actions: { _ in Button("再挑戦"){
-                correctValue = Int.random(in: 1..<100)
+                correctValue = Int.random(in: Self.range)
                 sliderValue = 50.0
             } },
             message: { message in
